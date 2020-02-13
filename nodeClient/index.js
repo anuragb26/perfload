@@ -11,6 +11,40 @@
     - Clock Speed
 */
 const os = require("os");
+const io = require("socket.io-client");
+let socket = io("http://127.0.0.1:8181");
+
+socket.on("connect", () => {
+  // we need a way to identify this machine to whomsoever concerned
+  console.log("I connected to the socket server...hooray");
+  const nI = os.networkInterfaces();
+  let macA;
+  // loop through all the network interfaces for this machine and find a non-internal one
+  for (let key in nI) {
+    if (!nI[key][0].internal) {
+      macA = nI[key][0].mac;
+      break;
+    }
+  }
+  // client Auth with single key value
+  socket.emit("clientAuth", "fsdfdhfidsuhfi");
+
+  performanceData().then(allPerformanceData => {
+    allPerformanceData.macA = macA;
+    socket.emit("initPerfData", allPerformanceData);
+  });
+
+  let perfDataInterval = setInterval(() => {
+    performanceData().then(allPerformanceData =>
+      socket.emit("perfData", allPerformanceData)
+    );
+  }, 1000);
+
+  socket.on("disconnect", () => {
+    clearInterval(perfDataInterval);
+  });
+});
+
 const performanceData = () => {
   return new Promise(async (resolve, reject) => {
     const osType = os.type() === "Darwin" ? "Mac" : os.type();
@@ -76,5 +110,3 @@ const getCpuLoad = async () => {
     }, 100);
   });
 };
-
-performanceData().then(allPerformanceData => console.log(allPerformanceData));
