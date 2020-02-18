@@ -41,6 +41,7 @@ function socketMain(io, socket) {
   // A machine has connected.Check to see if it is new.If it is add it.
   socket.on("perfData", data => {
     console.log("Tick...");
+    console.log("data", data);
     io.to("ui").emit("data", data);
   });
 }

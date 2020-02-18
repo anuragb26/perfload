@@ -35,9 +35,10 @@ socket.on("connect", () => {
   });
 
   let perfDataInterval = setInterval(() => {
-    performanceData().then(allPerformanceData =>
-      socket.emit("perfData", allPerformanceData)
-    );
+    performanceData().then(allPerformanceData => {
+      allPerformanceData.macA = macA;
+      socket.emit("perfData", allPerformanceData);
+    });
   }, 1000);
 
   socket.on("disconnect", () => {
