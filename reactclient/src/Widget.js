@@ -2,6 +2,7 @@ import React from "react";
 import Cpu from "./Cpu";
 import Mem from "./Mem";
 import Info from "./Info";
+import "./Widget.css";
 
 const Widget = props => {
   const {
@@ -18,7 +19,7 @@ const Widget = props => {
     macA = ""
   } = props.data;
   const cpu = { cpuLoad };
-  const mem = { totalMem, usedMem, memUsage };
+  const mem = { totalMem, usedMem, memUsage, freeMem };
   const info = { macA, osType, upTime, cpuModel, numCores, cpuSpeed };
 
   return (
