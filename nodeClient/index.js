@@ -21,6 +21,10 @@ socket.on("connect", () => {
   let macA;
   // loop through all the network interfaces for this machine and find a non-internal one
   for (let key in nI) {
+    // For Testing Purposes !
+    macA = Math.floor(Math.random() * 3) + 1;
+    break;
+
     if (!nI[key][0].internal) {
       macA = nI[key][0].mac;
       break;
@@ -59,6 +63,7 @@ const performanceData = () => {
     const cpuSpeed = cpus[0].speed;
     const memUsage = Math.floor((usedMem / totalMem) * 100) / 100;
     const cpuLoad = await getCpuLoad();
+    const isActive = true;
     resolve({
       osType,
       upTime,
@@ -69,7 +74,8 @@ const performanceData = () => {
       numCores,
       cpuSpeed,
       memUsage,
-      cpuLoad
+      cpuLoad,
+      isActive
     });
   });
 };

@@ -16,14 +16,22 @@ const Widget = props => {
     cpuSpeed = "",
     memUsage = "",
     cpuLoad = "",
-    macA = ""
+    macA = "",
+    isActive
   } = props.data;
-  const cpu = { cpuLoad };
-  const mem = { totalMem, usedMem, memUsage, freeMem };
+  const cpuWidgetId = `cpu-widget-${macA}`;
+  const memWidgetId = `mem-widget-${macA}`;
+  const cpu = { cpuLoad, cpuWidgetId };
+  const mem = { totalMem, usedMem, memUsage, freeMem, memWidgetId };
   const info = { macA, osType, upTime, cpuModel, numCores, cpuSpeed };
+  let notActiveDiv = "";
+  if (!isActive) {
+    notActiveDiv = <div className="not-active">Offline</div>;
+  }
 
   return (
-    <div>
+    <div className="widget col-sm-12">
+      {notActiveDiv}
       <Cpu cpuData={cpu} />
       <Mem memData={mem} />
       <Info infoData={info} />

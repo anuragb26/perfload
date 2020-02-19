@@ -23,6 +23,14 @@ function socketMain(io, socket) {
       // valid ui client has joined
       console.log("A ui client has joined");
       socket.join("ui");
+      // on load assume all machines are offline
+      Machine.find({}, (err, docs) => {
+        console.log("docs", docs);
+        docs.forEach(aMachine => {
+          aMachine.isActive = false;
+          io.to("ui").emit("data", aMachine);
+        });
+      });
     } else {
       // an invalid client has joined. Good bye
       socket.disconnect(true);
@@ -43,6 +51,16 @@ function socketMain(io, socket) {
     console.log("Tick...");
     console.log("data", data);
     io.to("ui").emit("data", data);
+  });
+
+  socket.on("disconnect", () => {
+    Machine.find({ macA: macA }, (err, docs) => {
+      if (docs && docs.length) {
+        // send one last emit to react
+        docs[0].isActive = false;
+        io.to("ui").emit("data", docs[0]);
+      }
+    });
   });
 }
 
