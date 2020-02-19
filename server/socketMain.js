@@ -57,7 +57,9 @@ function socketMain(io, socket) {
     Machine.find({ macA: macA }, (err, docs) => {
       if (docs && docs.length) {
         // send one last emit to react
+        console.log("disconnected", macA);
         docs[0].isActive = false;
+        console.log("docs", docs[0]);
         io.to("ui").emit("data", docs[0]);
       }
     });

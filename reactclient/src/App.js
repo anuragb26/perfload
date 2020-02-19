@@ -15,7 +15,7 @@ function App() {
     currentPeformanceData[data.macA] = data;
     setPerformanceData(currentPeformanceData);
   });
-  // console.log("performanceData", performanceData);
+  console.log("performanceData", performanceData);
   const widgets = [];
   Object.entries(performanceData).forEach(([key, value]) => {
     widgets.push(<Widget key={key} data={value} />);
